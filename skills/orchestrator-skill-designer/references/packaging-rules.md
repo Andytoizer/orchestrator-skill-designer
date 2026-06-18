@@ -10,9 +10,13 @@ Every skill needs:
 - YAML frontmatter with only `name` and `description`
 - Markdown body with runtime instructions
 
-Recommended:
+Recommended for Codex/OpenAI UI packages:
 
 - `agents/openai.yaml` with user-facing metadata
+
+Optional for Claude-only skills:
+
+- `agents/openai.yaml` if the same package is also meant to be used by Codex
 
 Optional:
 
@@ -33,7 +37,7 @@ Optional:
 The description is the trigger surface. Include:
 
 - what the skill does
-- when Codex should use it
+- when Codex, Claude Code, or another skill-aware agent should use it
 - important trigger phrases, contexts, file types, tools, or workflows
 
 Do not put "when to use" only in the body; the body is loaded after triggering.
@@ -48,7 +52,7 @@ Do not put "when to use" only in the body; the body is loaded after triggering.
 
 ## Agents Metadata
 
-`agents/openai.yaml` should include:
+`agents/openai.yaml` is Codex/OpenAI UI metadata. For Codex or portable packages, it should include:
 
 ```yaml
 interface:
@@ -59,9 +63,11 @@ interface:
 
 Quote strings. Ensure `default_prompt` includes `$<skill-name>`.
 
+For Claude-only skills, do not require this file. Keep runtime instructions in `SKILL.md` and references so Claude Code can use the skill without OpenAI metadata.
+
 ## Scaffolding
 
-For new skills, use:
+For new Codex skills, use the scaffold when it exists:
 
 ```bash
 python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/init_skill.py" <skill-name> --path <output-directory> --resources references
@@ -69,15 +75,19 @@ python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/init_s
 
 Add `scripts` or `assets` only when the blueprint requires them.
 
+For Claude-only skills, or portable work where the Codex scaffold is unavailable, create the portable core files manually.
+
 ## Validation
 
-Run:
+For Codex or portable packages, run the validator when it exists:
 
 ```bash
 python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" <path-to-skill-folder>
 ```
 
 Fix validation errors before claiming the skill is ready.
+
+For Claude-only skills, use Claude Code's available skill checks or manual structural validation. Do not fail solely because Codex validator scripts or `agents/openai.yaml` are absent.
 
 ## Do Not Include
 

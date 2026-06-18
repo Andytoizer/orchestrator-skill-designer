@@ -8,6 +8,7 @@ Use this lane after grill discovery to turn the idea into an orchestrator-style 
 - [../references/orchestrator-pattern.md](../references/orchestrator-pattern.md).
 - [../references/packaging-rules.md](../references/packaging-rules.md).
 - [../references/frameworks-and-systems.md](../references/frameworks-and-systems.md).
+- [../references/runtime-compatibility.md](../references/runtime-compatibility.md).
 
 Do not read create/validate/grill specialist files while designing. The journal should contain the discovery output from grill; if it does not, route back to grill or repair the journal with the smallest missing facts.
 
@@ -16,6 +17,7 @@ Do not read create/validate/grill specialist files while designing. The journal 
 - Design the skill before creating files.
 - Keep the target `SKILL.md` as a router and contract, not a long manual.
 - Prefer one installable orchestrator skill with internal specialists unless the user needs independent triggering.
+- Choose a target runtime (`portable`, `codex`, or `claude`) and make platform-specific metadata, scaffolding, and validation conditional.
 - Require a journal for any skill with multiple lanes, multi-step work, approval gates, or likely session resumption.
 - Use frameworks for judgment and systems/tools for deterministic work.
 - Decide the minimum resource set. Do not add scripts, assets, or references just to make the folder look complete.
@@ -30,10 +32,11 @@ Write the build plan into `skill-journal.md` using this compact shape:
 
 Name: `<skill-name>`
 Location: `<path>`
+Runtime target: `<portable | codex | claude>`
 Trigger description: <one concise paragraph>
 
 ### Orchestrator
-- <Responsibilities and gates>
+- <Responsibilities, runtime decisions, and gates>
 
 ### Specialists
 | Lane | File | Owns | Exits To |
@@ -56,6 +59,7 @@ Trigger description: <one concise paragraph>
 
 ### Gates
 - <approval, validation, safety, or handoff gate>
+- Runtime compatibility gate: <what must be true for Codex, Claude Code, or portable use>
 ```
 
 ## Exit Contract

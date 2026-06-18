@@ -2,9 +2,9 @@
 
 Built by [Andy Toizer](https://www.linkedin.com/in/andy-toizer/) — I'm the head of growth at [Freckle](https://freckle.io) and write [Agent Operator](https://agentoperator.substack.com/), a newsletter about what it actually looks like to build real systems with coding agents as a non-engineer, using live company data.
 
-Built for people who use coding agents to create reusable skills, agents, and workflow helpers.
+Built for people who use coding agents to create reusable skills, agents, and workflow helpers across Codex and Claude Code.
 
-**TLDR:** Orchestrator Skill Designer helps you turn a messy idea for a new Codex skill into a clean orchestrator-led skill package: one small router, focused specialist lanes, reusable frameworks, deterministic tools where needed, and a compact journal so the agent does not have to keep rereading the whole conversation.
+**TLDR:** Orchestrator Skill Designer helps you turn a messy idea for a new Codex or Claude Code skill into a clean orchestrator-led skill package: one small router, focused specialist lanes, reusable frameworks, deterministic tools where needed, and a compact journal so the agent does not have to keep rereading the whole conversation.
 
 Most skills start simple and then grow into one long instruction file. This skill helps you avoid that. It gives the model a repeatable way to ask the right questions, design the architecture, create the files, and validate that the skill can actually be used later.
 
@@ -12,7 +12,7 @@ Most skills start simple and then grow into one long instruction file. This skil
 
 - **Grills the idea first** — starts with a focused discovery lane so unclear requirements get resolved before files are created
 - **Designs the skill architecture** — decides what belongs in the orchestrator, specialist files, references, scripts, assets, and durable state
-- **Creates the skill package** — scaffolds or updates a Codex skill folder with the right file layout
+- **Creates the skill package** — scaffolds or updates a portable skill folder with the right file layout
 - **Keeps context small** — uses a `skill-journal.md` handoff so each specialist can continue from compact state instead of reading everything
 - **Validates the result** — checks frontmatter, links, lane contracts, journal behavior, and packaging hygiene
 - **Packages cleanly** — avoids secrets, local paths, private context, and unnecessary docs inside the skill folder
@@ -66,6 +66,7 @@ skills/orchestrator-skill-designer/
     ├── frameworks-and-systems.md
     ├── orchestrator-pattern.md
     ├── packaging-rules.md
+    ├── runtime-compatibility.md
     └── skill-journal.md
 ```
 
@@ -80,14 +81,21 @@ mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 cp -R skills/orchestrator-skill-designer "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
 
-Restart or refresh Codex if your environment does not automatically discover new skills.
+Or copy it into your Claude Code personal skills directory:
+
+```bash
+mkdir -p "$HOME/.claude/skills"
+cp -R skills/orchestrator-skill-designer "$HOME/.claude/skills/"
+```
+
+Restart or refresh your agent environment if it does not automatically discover new skills.
 
 ### Use it
 
 Invoke the skill explicitly:
 
 ```text
-Use $orchestrator-skill-designer to design and create an orchestrator-style skill for my workflow.
+Use $orchestrator-skill-designer to design and create a portable orchestrator-style skill for my workflow.
 ```
 
 You can also point it at an existing skill:
@@ -122,7 +130,7 @@ If the journal is too thin, the model should repair the journal instead of loadi
 
 ## Validation
 
-Run the Codex skill validator after installing or modifying the skill:
+For Codex or portable packages, run the Codex skill validator after installing or modifying the skill:
 
 ```bash
 python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
@@ -136,6 +144,8 @@ python3 -m pip install --target /tmp/codex-pyyaml PyYAML
 PYTHONPATH=/tmp/codex-pyyaml python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
   "${CODEX_HOME:-$HOME/.codex}/skills/orchestrator-skill-designer"
 ```
+
+For Claude Code, validate the same portable core manually if a runtime validator is not available: `SKILL.md` should exist, frontmatter should contain only `name` and `description`, relative links should resolve, specialist files should exist, and no required behavior should live only in `agents/openai.yaml`.
 
 ## Adapting The Pattern
 
@@ -151,4 +161,4 @@ The goal is not more files. The goal is less confusion.
 
 ## Public Packaging Notes
 
-This repository contains no secrets, private customer data, local `.env` files, or machine-specific paths. It is packaged as a reusable Codex skill.
+This repository contains no secrets, private customer data, local `.env` files, or machine-specific paths. It is packaged as a reusable portable agent skill.

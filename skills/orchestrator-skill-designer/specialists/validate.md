@@ -7,33 +7,39 @@ Use this lane after creating or editing a skill, and when a user reports that an
 - `skill-journal.md`.
 - [../references/forward-testing.md](../references/forward-testing.md).
 - [../references/packaging-rules.md](../references/packaging-rules.md).
+- [../references/runtime-compatibility.md](../references/runtime-compatibility.md).
 - The target skill's `SKILL.md` first, then only linked specialist/reference files needed to validate the orchestrator, lane table, journal contract, and reported failure.
 
 Do not read all target references by default. First validate the orchestrator, lane table, journal contract, and linked files named by the target `SKILL.md`. Read additional target references only when validating a link, a claimed gate, or a failure.
 
 ## Steps
 
-1. Run the system validator:
+1. Identify the target runtime from `skill-journal.md` and apply [../references/runtime-compatibility.md](../references/runtime-compatibility.md).
+2. For Codex or portable skills, run the system validator when available:
    ```bash
    python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" <path-to-skill-folder>
    ```
-2. Inspect the target folder shape:
+   If the validator is unavailable and the target is Claude-only, use manual structural checks instead of failing.
+3. Inspect the target folder shape:
    - `SKILL.md` exists
-   - `agents/openai.yaml` exists and mentions `$<skill-name>` in `default_prompt`
+   - frontmatter contains only `name` and `description`
+   - `agents/openai.yaml` exists and mentions `$<skill-name>` in `default_prompt` for Codex or portable packages; it is optional for Claude-only skills
    - specialists exist when the orchestrator lane table references them
    - references exist when `SKILL.md` links them
    - no placeholder TODO text remains
    - no extra README/changelog/quick-reference docs were created
-3. Check orchestrator behavior:
+   - no required runtime behavior lives only in `agents/openai.yaml`
+   - no Codex-only script, absolute `.codex` path, or validator is required for a Claude-only run
+4. Check orchestrator behavior:
    - first move routes to grill when appropriate
    - lane table covers expected intents
    - specialists have exit contracts
    - journal/handoff rules are visible in orchestrator and specialist exits
    - each lane can continue from the journal plus its own specialist file and named references
    - deterministic or fragile work has scripts/assets/validators instead of prose only
-4. Smoke-test scripts or validators if the target skill includes them.
-5. Forward-test with a subagent when the skill is complex and a fresh pass is available. Do not leak the intended answer or your diagnosis.
-6. Patch issues and rerun validation.
+5. Smoke-test scripts or validators if the target skill includes them.
+6. Forward-test with a subagent when the skill is complex and a fresh pass is available. Do not leak the intended answer or your diagnosis.
+7. Patch issues and rerun validation.
 
 ## Exit Contract
 

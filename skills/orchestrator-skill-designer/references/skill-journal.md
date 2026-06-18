@@ -18,10 +18,10 @@ The journal is compact durable state. It is not a transcript and not a replaceme
 
 Before a lane exits, the journal must answer what the next lane needs without loading unrelated files:
 
-- **Grill -> Design**: purpose, trigger, scope, orchestrator authority, proposed specialists, frameworks, systems/tools, durable artifacts, gates, open questions.
-- **Design -> Create**: target name, location, trigger description, folder shape, lane table, reference list, systems/tools list, durable artifacts, gates.
-- **Create -> Validate**: target path, files created or changed, expected orchestrator behavior, expected specialist exits, validation commands to run, known risks.
-- **Validate -> Create/Design/Complete**: validation results, failures, files needing edits, behavior risks, exact next lane or completion status.
+- **Grill -> Design**: purpose, trigger, target runtime, scope, orchestrator authority, proposed specialists, frameworks, systems/tools, durable artifacts, gates, open questions.
+- **Design -> Create**: target name, location, target runtime, trigger description, folder shape, lane table, reference list, systems/tools list, durable artifacts, gates.
+- **Create -> Validate**: target path, target runtime, files created or changed, expected orchestrator behavior, expected specialist exits, validation commands to run, known risks.
+- **Validate -> Create/Design/Complete**: target runtime, validation results, failures, files needing edits, behavior risks, exact next lane or completion status.
 
 If the journal fails this standard, repair the journal before leaving the lane.
 
@@ -33,10 +33,11 @@ If the journal fails this standard, repair the journal before leaving the lane.
 Updated: <ISO timestamp>
 Lane: <orchestrator | grill | design | create | validate | blocked>
 Status: <discovering | designing | creating | validating | complete | blocked>
+Target runtime: <portable | codex | claude>
 
 ## Objective
 
-<What the skill should help Codex do, in two or three sentences.>
+<What the skill should help the agent do, in two or three sentences.>
 
 ## Success Criteria
 

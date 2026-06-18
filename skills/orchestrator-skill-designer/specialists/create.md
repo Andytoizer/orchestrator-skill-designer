@@ -7,18 +7,19 @@ Use this lane to scaffold or edit the actual skill folder from the approved or c
 - `skill-journal.md`.
 - [../references/packaging-rules.md](../references/packaging-rules.md).
 - [../references/orchestrator-pattern.md](../references/orchestrator-pattern.md).
+- [../references/runtime-compatibility.md](../references/runtime-compatibility.md).
 - If updating an existing skill, read the target `SKILL.md` first, then only the target specialist/reference files named in the journal or directly involved in the current edit.
 
 Do not read validate/grill/design specialist files unless routed back to those lanes. Use the blueprint in the journal as the source of truth. If implementation reveals missing structure, update the journal and route back to design rather than loading every reference.
 
 ## Steps
 
-1. Confirm the target skill name and location from `skill-journal.md`. If absent, default to `${CODEX_HOME:-$HOME/.codex}/skills`.
-2. If creating a new skill, run the system scaffold:
+1. Confirm the target skill name, location, and runtime target from `skill-journal.md`. If location is absent, choose it from [../references/runtime-compatibility.md](../references/runtime-compatibility.md).
+2. If creating a new Codex skill and the system scaffold exists, run:
    ```bash
    python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/init_skill.py" <skill-name> --path <output-directory> --resources references
    ```
-   Add `scripts` or `assets` only when the blueprint needs them.
+   For Claude-only or portable work where the script is unavailable, create the folder and files manually using the portable core shape. Add `scripts` or `assets` only when the blueprint needs them.
 3. Create `specialists/` manually when the blueprint includes lanes.
 4. Replace the scaffolded `SKILL.md` with a lean orchestrator:
    - frontmatter with only `name` and `description`
@@ -35,7 +36,7 @@ Do not read validate/grill/design specialist files unless routed back to those l
    - exit contract that writes `## Handoff` and returns to the orchestrator
 6. Write reference files for frameworks, packaging rules, domain knowledge, examples, templates, or journal format.
 7. Write scripts only when reliability, repetition, validation, or fragile transformations justify low freedom.
-8. Update `agents/openai.yaml` so `display_name`, `short_description`, and `default_prompt` match the final skill.
+8. For Codex or portable packages, update `agents/openai.yaml` so `display_name`, `short_description`, and `default_prompt` match the final skill. For Claude-only skills, do not require this file.
 9. Delete placeholder examples and unused resource directories.
 
 ## File Rules

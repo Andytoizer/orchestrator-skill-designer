@@ -7,7 +7,7 @@ Use this reference when designing the target skill structure.
 ```text
 skill-name/
 ├── SKILL.md
-├── agents/
+├── agents/                 # Codex/OpenAI metadata; omit for Claude-only skills
 │   └── openai.yaml
 ├── specialists/
 │   ├── grill.md
