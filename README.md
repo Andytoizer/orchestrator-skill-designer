@@ -2,9 +2,9 @@
 
 Built by [Andy Toizer](https://www.linkedin.com/in/andy-toizer/) — I'm the head of growth at [Freckle](https://freckle.io) and write [Agent Operator](https://agentoperator.substack.com/), a newsletter about what it actually looks like to build real systems with coding agents as a non-engineer, using live company data.
 
-Built for people who use coding agents to create reusable skills, agents, and workflow helpers across Codex and Claude Code.
+Built for people who use coding agents to create reusable skills, agents, and workflow helpers.
 
-**TLDR:** Orchestrator Skill Designer helps you turn a messy idea for a new Codex or Claude Code skill into a clean orchestrator-led skill package: one small router, focused specialist lanes, reusable frameworks, deterministic tools where needed, and a compact journal so the agent does not have to keep rereading the whole conversation.
+**TLDR:** Orchestrator Skill Designer helps you turn a messy idea for a new skill into a clean orchestrator-led skill package: one small router, focused specialist lanes, reusable frameworks, deterministic tools where needed, and a compact journal so the agent does not have to keep rereading the whole conversation.
 
 Most skills start simple and then grow into one long instruction file. This skill helps you avoid that. It gives the model a repeatable way to ask the right questions, design the architecture, create the files, and validate that the skill can actually be used later.
 
@@ -74,18 +74,12 @@ skills/orchestrator-skill-designer/
 
 ### Install
 
-Copy the skill folder into your Codex skills directory:
+Copy the skill folder into the skills directory your terminal agent watches:
 
 ```bash
-mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
-cp -R skills/orchestrator-skill-designer "${CODEX_HOME:-$HOME/.codex}/skills/"
-```
-
-Or copy it into your Claude Code personal skills directory:
-
-```bash
-mkdir -p "$HOME/.claude/skills"
-cp -R skills/orchestrator-skill-designer "$HOME/.claude/skills/"
+SKILLS_DIR="$HOME/path-to-your-agent-skills"
+mkdir -p "$SKILLS_DIR"
+cp -R skills/orchestrator-skill-designer "$SKILLS_DIR/"
 ```
 
 Restart or refresh your agent environment if it does not automatically discover new skills.
@@ -95,7 +89,7 @@ Restart or refresh your agent environment if it does not automatically discover 
 Invoke the skill explicitly:
 
 ```text
-Use $orchestrator-skill-designer to design and create a portable orchestrator-style skill for my workflow.
+Use $orchestrator-skill-designer to design and create an orchestrator-style skill for my workflow.
 ```
 
 You can also point it at an existing skill:
@@ -130,22 +124,15 @@ If the journal is too thin, the model should repair the journal instead of loadi
 
 ## Validation
 
-For Codex or portable packages, run the Codex skill validator after installing or modifying the skill:
+If your agent runtime includes a skill validator, run it against `$SKILLS_DIR/orchestrator-skill-designer` after installing or modifying the skill.
 
-```bash
-python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
-  "${CODEX_HOME:-$HOME/.codex}/skills/orchestrator-skill-designer"
-```
+You can also do a manual structural check:
 
-If your Python environment does not include `PyYAML`, install it into a temporary target and use `PYTHONPATH`:
-
-```bash
-python3 -m pip install --target /tmp/codex-pyyaml PyYAML
-PYTHONPATH=/tmp/codex-pyyaml python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
-  "${CODEX_HOME:-$HOME/.codex}/skills/orchestrator-skill-designer"
-```
-
-For Claude Code, validate the same portable core manually if a runtime validator is not available: `SKILL.md` should exist, frontmatter should contain only `name` and `description`, relative links should resolve, specialist files should exist, and no required behavior should live only in `agents/openai.yaml`.
+- `SKILL.md` exists
+- frontmatter contains only `name` and `description`
+- relative links resolve
+- specialist files exist
+- required behavior lives in `SKILL.md` or references, not only in UI metadata
 
 ## Adapting The Pattern
 
