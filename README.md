@@ -1,14 +1,52 @@
 # Orchestrator Skill Designer
 
-Orchestrator Skill Designer is a Codex skill for designing and creating other Codex skills with an orchestrator/specialist/frameworks/systems model.
+Built for people who use coding agents to create reusable skills, agents, and workflow helpers.
 
-Use it when a skill should behave like a small operating system rather than a single prompt file:
+**TLDR:** Orchestrator Skill Designer helps you turn a messy idea for a new Codex skill into a clean orchestrator-led skill package: one small router, focused specialist lanes, reusable frameworks, deterministic tools where needed, and a compact journal so the agent does not have to keep rereading the whole conversation.
 
-- an orchestrator owns intake, lane selection, gates, and final synthesis
-- specialists own focused lanes of work
-- frameworks hold reusable judgment, rubrics, examples, and templates
-- systems/tools handle deterministic or fragile work
-- a compact journal preserves state across specialist handoffs and context compaction
+Most skills start simple and then grow into one long instruction file. This skill helps you avoid that. It gives the model a repeatable way to ask the right questions, design the architecture, create the files, and validate that the skill can actually be used later.
+
+## What It Does
+
+- **Grills the idea first** — starts with a focused discovery lane so unclear requirements get resolved before files are created
+- **Designs the skill architecture** — decides what belongs in the orchestrator, specialist files, references, scripts, assets, and durable state
+- **Creates the skill package** — scaffolds or updates a Codex skill folder with the right file layout
+- **Keeps context small** — uses a `skill-journal.md` handoff so each specialist can continue from compact state instead of reading everything
+- **Validates the result** — checks frontmatter, links, lane contracts, journal behavior, and packaging hygiene
+- **Packages cleanly** — avoids secrets, local paths, private context, and unnecessary docs inside the skill folder
+
+## How It Works
+
+```mermaid
+flowchart LR
+    A["User asks for a skill"] --> B["Orchestrator\nSKILL.md"]
+    B --> C["Grill lane\nresolve decisions"]
+    C --> D["skill-journal.md\ncompact state"]
+    D --> E["Design lane\nblueprint"]
+    E --> F["Create lane\nwrite files"]
+    F --> G["Validate lane\nQA package"]
+    G --> H["Ready skill"]
+
+    D -. "handoff" .-> B
+    B -. "routes one lane at a time" .-> C
+    B -. "routes one lane at a time" .-> E
+    B -. "routes one lane at a time" .-> F
+    B -. "routes one lane at a time" .-> G
+```
+
+The important idea: the orchestrator does not load every file and hope for the best. It reads the journal, routes to one specialist, and that specialist reads only the references needed for the current lane.
+
+## The Model
+
+Use this skill when the thing you are building needs more structure than a single prompt.
+
+| Layer | Job |
+| --- | --- |
+| Orchestrator | Owns intake, routing, gates, and final synthesis |
+| Specialists | Own narrow lanes such as discovery, design, creation, and validation |
+| Frameworks | Hold reusable judgment, examples, rubrics, and templates |
+| Systems / tools | Handle deterministic or fragile work through scripts, assets, validators, or state |
+| Journal | Carries compact progress between lanes and resumed sessions |
 
 ## Repository Contents
 
@@ -29,7 +67,9 @@ skills/orchestrator-skill-designer/
     └── skill-journal.md
 ```
 
-## Install
+## Quick Start
+
+### Install
 
 Copy the skill folder into your Codex skills directory:
 
@@ -40,7 +80,7 @@ cp -R skills/orchestrator-skill-designer "${CODEX_HOME:-$HOME/.codex}/skills/"
 
 Restart or refresh Codex if your environment does not automatically discover new skills.
 
-## Usage
+### Use it
 
 Invoke the skill explicitly:
 
@@ -48,27 +88,35 @@ Invoke the skill explicitly:
 Use $orchestrator-skill-designer to design and create an orchestrator-style skill for my workflow.
 ```
 
-The skill starts with a grill-style discovery lane, then designs the skill blueprint, creates or updates the skill files, and validates the result.
+You can also point it at an existing skill:
 
-## Design Principles
+```text
+Use $orchestrator-skill-designer to redesign this skill into a smaller orchestrator with specialist lanes.
+```
 
-The packaged skill is intentionally self-referential: it follows the same pattern it teaches.
+## Example Use Cases
 
-- `SKILL.md` stays lean and acts as the orchestrator.
-- `specialists/` contains focused lanes.
-- `references/` contains reusable frameworks and packaging rules.
-- `skill-journal.md` is created at runtime by the skill to track compact progress.
-- Specialists must hand back to the orchestrator instead of cascading directly into each other.
+- Turn a long single-file skill into a routed orchestrator skill
+- Add a discovery lane before a skill starts creating files
+- Split repeated work into specialists and references
+- Decide whether a fragile step should become a script or asset
+- Add a journal so resumed sessions have enough compact context
+- Validate whether specialists can continue from the journal without reading the whole folder
 
 ## Context Discipline
 
-The skill is designed to reduce avoidable context bloat:
+The skill is strict about context because large skills can accidentally make agents worse.
 
-- read the journal first
-- load exactly one specialist lane at a time
-- load only the references named by that lane
-- repair a thin journal instead of reading the whole skill folder
-- write exact handoff artifacts before changing lanes
+Expected working set for a lane:
+
+```text
+SKILL.md
+skill-journal.md
+one current specialist file
+only the references named by that specialist
+```
+
+If the journal is too thin, the model should repair the journal instead of loading the whole folder.
 
 ## Validation
 
@@ -86,6 +134,18 @@ python3 -m pip install --target /tmp/codex-pyyaml PyYAML
 PYTHONPATH=/tmp/codex-pyyaml python3 "${CODEX_HOME:-$HOME/.codex}/skills/.system/skill-creator/scripts/quick_validate.py" \
   "${CODEX_HOME:-$HOME/.codex}/skills/orchestrator-skill-designer"
 ```
+
+## Adapting The Pattern
+
+The exact lanes are not sacred. The pattern is.
+
+For a different kind of skill, keep the orchestrator and journal, then swap in the lanes that match the work. For example:
+
+- `research -> synthesize -> write -> validate`
+- `intake -> plan -> execute -> review`
+- `discover -> design -> build -> test`
+
+The goal is not more files. The goal is less confusion.
 
 ## Public Packaging Notes
 
