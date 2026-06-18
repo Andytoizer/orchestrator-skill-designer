@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrator Skill Designer"
+  short_description: "Design orchestrator-style skills"
+  default_prompt: "Use $orchestrator-skill-designer to design and create an orchestrator-style skill for my workflow."
