@@ -2,7 +2,7 @@
 
 Built by [Andy Toizer](https://www.linkedin.com/in/andy-toizer/) — I'm the head of growth at [Freckle](https://freckle.io) and write [Agent Operator](https://agentoperator.substack.com/), a newsletter about what it actually looks like to build real systems with coding agents as a non-engineer, using live company data.
 
-Built for people who use coding agents to create reusable skills, agents, and workflow helpers.
+Built for people who use Claude Code and Codex to create reusable skills, agents, and workflow helpers.
 
 **TLDR:** Orchestrator Skill Designer helps you turn a messy idea for a new skill into a clean orchestrator-led skill package: one small router, focused specialist lanes, reusable frameworks, deterministic tools where needed, and a compact journal so the agent does not have to keep rereading the whole conversation.
 
